@@ -1,0 +1,33 @@
+# Build artifacts
+build/
+dist/
+__pycache__/
+*.pyc
+*.spec.bak
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Local caches / personal data (do NOT publish)
+slack_cache.json
+feed_cache.json
+feed_state.json
+*.log
+ticker_log.txt
+
+# Drawio scratch / backups
+*.drawio
+*.drawio.bkp
+.$*
+
+# OS / editor
+Thumbs.db
+.DS_Store
+.idea/
+.vscode/
+
+# Secrets / configs that may contain ids or tokens
+led_badge_config.json
+*.bak-*

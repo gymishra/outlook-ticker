@@ -1,0 +1,10 @@
+{
+  "enabled": false,
+  "transport": "ble",
+  "ble_address": null,
+  "num_meetings": 2,
+  "speed": 6,
+  "brightness": 100,
+  "mode": 0,
+  "refresh_minutes": 5
+}
