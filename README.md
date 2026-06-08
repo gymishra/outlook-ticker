@@ -13,6 +13,81 @@ account your Outlook is already signed into.
 
 ---
 
+## Setup (step by step)
+
+Follow these in order. Steps 1–2 are the **Outlook Ticker** (required). Steps 3–6
+set up the **Inbox To Tasks agent** (optional — only if you want tasks
+auto-created from your inbox/Slack/feed).
+
+### Part A — Outlook Ticker (required)
+
+**Step 1 — Prerequisites**
+- Windows 10/11 with the **classic Outlook desktop app installed and signed in**
+  (the ticker automates Outlook directly; it must be running).
+- For running from source: **Python 3.10+** and `pip install pywin32`.
+  (Not needed if you use the prebuilt `.exe`.)
+
+**Step 2 — Get the ticker running** — choose ONE:
+
+- **Option 2a — Prebuilt executable (easiest)**
+  1. Download/clone this repo.
+  2. Build the exe once (or use a release if provided):
+     ```bash
+     pip install pyinstaller pywin32
+     pyinstaller --onefile --noconsole --name OutlookTicker outlook_ticker.py
+     ```
+     The exe is created in `dist\OutlookTicker.exe`.
+  3. Double-click `dist\OutlookTicker.exe`. The ticker bars appear at the top of
+     your screen.
+
+- **Option 2b — Run from source**
+  ```bash
+  pip install pywin32
+  python outlook_ticker.py
+  ```
+
+**Step 3 — (Optional) Launch at login**
+Put a shortcut to `OutlookTicker.exe` in your Startup folder:
+1. Press `Win + R`, type `shell:startup`, press Enter.
+2. Copy a shortcut to `dist\OutlookTicker.exe` into that folder.
+
+At this point the ticker shows your emails, calendar, and any existing Outlook
+tasks. To have tasks **auto-created**, continue to Part B.
+
+### Part B — Inbox To Tasks agent (optional, recommended)
+
+This is what populates the **Tasks** bar automatically. It runs inside **Amazon
+Quick Desktop**, independent of the ticker.
+
+**Step 4 — Install Amazon Quick Desktop**
+- Sign in to Amazon Quick on the web → **Extensions** → download
+  **QuickDesktop-extension** for Windows → install and sign in. The desktop app
+  runs a background agent runtime (`quickwork-agent`).
+
+**Step 5 — Find your "Work Tasks" list id**
+- In Outlook To-Do, create (or pick) the list you want tasks added to, e.g.
+  **"Work Tasks"**. You'll need its `listId` for the agent prompt. (You can get
+  list ids via the Outlook/Graph `todo_lists` tool, or your MCP Outlook server's
+  `todo_lists` action.)
+
+**Step 6 — Create the scheduled agent in Quick Desktop**
+1. In Quick Desktop, create a new **scheduled agent** named **"Inbox To Tasks"**.
+2. **Capabilities tab** — add these capabilities and set the Slack workspace:
+   - **Outlook**, **Slack** (workspace: `AWS Slack V2`), **Knowledge Graph Tools**,
+     **Feed Tools** (see the [Capabilities table](#capabilities-tab) below).
+3. **Task objectives & model tab** — paste the
+   [agent prompt](#task-objectives--model-tab--the-agent-prompt) below, replacing
+   `<WORK_TASKS_LIST_ID>` with the id from Step 5.
+4. **Schedule tab** — set the cadence (e.g., **every 5 minutes**).
+5. Save and enable the agent.
+
+**Step 7 — Verify the loop**
+- The agent runs on its schedule, evaluates new inbox/Slack/feed items, and adds
+  tasks to your "Work Tasks" list. Within one refresh cycle (~60s) the ticker's
+  **Tasks** bar shows them. Done.
+
+---
+
 ## Features
 
 - **Four scrolling ticker bars**, always on top:
