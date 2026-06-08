@@ -29,18 +29,23 @@ auto-created from your inbox/Slack/feed).
 
 **Step 2 — Get the ticker running** — choose ONE:
 
-- **Option 2a — Prebuilt executable (easiest)**
-  1. Download/clone this repo.
-  2. Build the exe once (or use a release if provided):
-     ```bash
-     pip install pyinstaller pywin32
-     pyinstaller --onefile --noconsole --name OutlookTicker outlook_ticker.py
-     ```
-     The exe is created in `dist\OutlookTicker.exe`.
-  3. Double-click `dist\OutlookTicker.exe`. The ticker bars appear at the top of
-     your screen.
+- **Option 2a — Download the prebuilt executable (easiest)**
+  1. Go to the [**Releases**](https://github.com/gymishra/outlook-ticker/releases/latest) page.
+  2. Download **`OutlookTicker.exe`** (single self-contained file — no Python needed).
+  3. Double-click it. The ticker bars appear at the top of your screen.
 
-- **Option 2b — Run from source**
+- **Option 2b — Build the exe yourself**
+  ```bash
+  pip install pyinstaller pywin32
+  pyinstaller --onefile --noconsole --name OutlookTicker ^
+      --hidden-import win32com --hidden-import win32com.client ^
+      --hidden-import pythoncom --hidden-import pywintypes ^
+      --hidden-import led_meeting_badge --collect-submodules win32com ^
+      outlook_ticker.py
+  ```
+  The exe is created in `dist\OutlookTicker.exe`.
+
+- **Option 2c — Run from source**
   ```bash
   pip install pywin32
   python outlook_ticker.py
